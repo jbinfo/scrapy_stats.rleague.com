@@ -17,39 +17,33 @@ class StatsRleagueComSpider(CrawlSpider):
         i = RleagueCrawlerItem()
 
         i['teamone'] = {
-            'name':     ''.join(sel.xpath('normalize-space(//table//tr[1]/th[1])').extract()),
-            'pos':      '',
-            'player':   '',
-            't':        '',
-            'g':        '',
-            'fg':       '',
-            'pts':      '',
+            'name':    ''.join(sel.xpath('normalize-space(//table//tr[1]/th[1])').extract()),
+            'players': [],
         }
 
         i['teamtwo'] = {
-            'name':     ''.join(sel.xpath('normalize-space(//table//tr[1]/th[2])').extract()),
-            'pos':      '',
-            'player':   '',
-            't':        '',
-            'g':        '',
-            'fg':       '',
-            'pts':      '',
+            'name':    ''.join(sel.xpath('normalize-space(//table//tr[1]/th[2])').extract()),
+            'players': [],
         }
         
-        for tr in sel.xpath('//table//tr[position() > 2 and position() < last() - 1]'):
-            i['teamone']['pos']     = ''.join(tr.xpath('normalize-space(td[1]//text())').extract())
-            i['teamone']['player']  = ''.join(tr.xpath('normalize-space(td[2]//text())').extract())
-            i['teamone']['t']       = ''.join(tr.xpath('normalize-space(td[3]//text())').extract())
-            i['teamone']['g']       = ''.join(tr.xpath('normalize-space(td[4]//text())').extract())
-            i['teamone']['fg']      = ''.join(tr.xpath('normalize-space(td[5]//text())').extract())
-            i['teamone']['pts']     = ''.join(tr.xpath('normalize-space(td[6]//text())').extract())
+        for tr in sel.xpath('//table//tr[position() > 2 and position() < last() - 1]'): 
+            i['teamone']['players'].append({
+                'pos':      ''.join(tr.xpath('td[1]//text()').extract()).strip(),
+                'player':   ''.join(tr.xpath('td[2]//text()').extract()).strip(),
+                't':        ''.join(tr.xpath('td[3]//text()').extract()).strip(),
+                'g':        ''.join(tr.xpath('td[4]//text()').extract()).strip(),
+                'fg':       ''.join(tr.xpath('td[5]//text()').extract()).strip(),
+                'pts':      ''.join(tr.xpath('td[6]//text()').extract()).strip(),
+            })
 
-            i['teamtwo']['pos']     = ''.join(tr.xpath('normalize-space(td[7]//text())').extract())
-            i['teamtwo']['player']  = ''.join(tr.xpath('normalize-space(td[8]//text())').extract())
-            i['teamtwo']['t']       = ''.join(tr.xpath('normalize-space(td[9]//text())').extract())
-            i['teamtwo']['g']       = ''.join(tr.xpath('normalize-space(td[10]//text())').extract())
-            i['teamtwo']['fg']      = ''.join(tr.xpath('normalize-space(td[11]//text())').extract())
-            i['teamtwo']['pts']     = ''.join(tr.xpath('normalize-space(td[12]//text())').extract())
+            i['teamtwo']['players'].append({
+                'pos':      ''.join(tr.xpath('td[7]//text()').extract()).strip(),
+                'player':   ''.join(tr.xpath('td[8]//text()').extract()).strip(),
+                't':        ''.join(tr.xpath('td[9]//text()').extract()).strip(),
+                'g':        ''.join(tr.xpath('td[10]//text()').extract()).strip(),
+                'fg':       ''.join(tr.xpath('td[11]//text()').extract()).strip(),
+                'pts':      ''.join(tr.xpath('td[12]//text()').extract()).strip(),
+            })
 
 
         i['scrums']     = ''.join(sel.xpath('normalize-space(//table//tr[last()]/td/*[contains(., "Scrums")]/following-sibling::text()[1])').extract())
